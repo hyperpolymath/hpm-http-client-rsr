@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: MPL-2.0
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+= hpm-http-client-rsr — Roadmap
+v0.1.0-dev, 2026-05-28
+:toc: left
+:toclevels: 2
+
+Status legend: `done` · `in-progress` · `blocked` · `planned`
+
+== v0.1 — One-shot HTTPS client (current)
+
+*Status: done in scaffold; awaiting CI / packaging.*
+
+* [x] RSR layout (src/abi/, ffi/zig/, ABI-FFI-README.md)
+* [x] Idris2 ABI: Types + Foreign with %foreign decls and safe wrappers
+* [x] Zig FFI: `hpm_http_client_new` / `_free`, `hpm_http_client_request`,
+  `hpm_http_response_status` / `_body` / `_free`
+* [x] HTTPS via `std.http.Client` + `std.crypto.tls.Client`
+* [x] Zig test suite covering: GET round-trip, POST + body, status code
+  capture, body size-query, malformed URL handling, null-safety
+* [ ] Generated C header `generated/abi/hpm_http_client.h`
+* [ ] CI: `zig build test` on every PR
+* [ ] First downstream consumer wired (OikosBot AffineScript port)
+
+== v0.2 — Response inspection + streaming
+
+*Status: planned.*
+
+* [ ] Response header lookup (`hpm_http_response_header`)
+* [ ] Streaming body reads (for large payloads beyond the 1 MiB ceiling)
+* [ ] Configurable max-body cap per client
+* [ ] Redirect-following knobs surfaced through the FFI
+
+== v0.3 — Hardening
+
+* [ ] Differential testing against `curl` on canonical fixtures
+* [ ] Connection pool reuse across requests
+* [ ] OpenSSF Scorecard ≥ 7
+* [ ] SLSA Level 3 build provenance for `libhpm_http_client.so`
+
+== v1.0 — Stable
+
+* [ ] All of v0.1 → v0.3 shipped
+* [ ] Used in production by OikosBot
+* [ ] API surface frozen; semver kicks in

@@ -1,0 +1,13 @@
+-- SPDX-License-Identifier: MPL-2.0
+package hpm-http-client-rsr
+version = 0.1.0
+
+authors = "Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>"
+license = "MPL-2.0"
+brief = "HTTP/1.1 + HTTPS client primitives (Idris2 ABI + Zig FFI)"
+readme = "README.adoc"
+sourcedir = "src"
+
+modules =
+    HpmHttpClient.ABI.Types,
+    HpmHttpClient.ABI.Foreign
