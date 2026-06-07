@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: MPL-2.0
+-- Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 ||| hpm-http-client-rsr — %foreign declarations binding into
 ||| libhpm_http_client.so.
 |||

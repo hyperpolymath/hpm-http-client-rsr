@@ -1,3 +1,5 @@
+-- SPDX-License-Identifier: MPL-2.0
+-- Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 ||| hpm-http-client-rsr — type declarations for the FFI boundary.
 |||
 ||| Mirrors the design of hpm-crypto-rsr: every type that crosses the
