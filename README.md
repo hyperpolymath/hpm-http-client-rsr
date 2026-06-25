@@ -1,0 +1,73 @@
+<!--
+SPDX-License-Identifier: CC-BY-SA-4.0
+SPDX-FileCopyrightText: 2025-2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
+
+Jonathan D.A. Jewell \<[j.d.a.jewell@open.ac](j.d.a.jewell@open.ac).uk\>
+v0.1.0-dev, 2026-05-28 :toc: macro :toclevels: 2
+
+**One-shot HTTPS client for the Hyperpolymath RSR Standard (Idris2 ABI\
+Zig FFI). Sibling to
+[hpm-crypto-rsr](https://github.com/hyperpolymath/hpm-crypto-rsr);
+together they form the bot HTTP layer.**
+
+Built directly on `std.http.Client` + `std.crypto.tls.Client` — no
+allocator-driven dependency surface beyond the Zig stdlib.
+
+<div id="toc">
+
+</div>
+
+# Status
+
+`0.1.0-dev` — **one-shot request API working, KAT against in-process
+test server, status + body inspection wired.**
+
+| Primitive | Status |
+|----|----|
+| `hpm_http_client_new` / `_free` | Client lifecycle (allocator-backed) |
+| `hpm_http_client_request` | One-shot request (method / URL / extra headers / body). Returns an opaque response handle. |
+| `hpm_http_response_status` | Numeric HTTP status code from the response handle. |
+| `hpm_http_response_body` | Copy the response body into a caller buffer; supports size-query. |
+| `hpm_http_response_free` | Free the response handle. |
+| HTTPS via `std.crypto.tls.Client` | Implemented (inherited from `std.http.Client`). |
+
+See <a href="ROADMAP.adoc" class="adoc">ROADMAP</a> for what’s next
+(response headers, streaming body, retries).
+
+# Motivation
+
+The OikosBot port needs an HTTPS client capable of talking to
+`api.github.com` (POST `/app/installations/{id}/access_tokens`, POST
+`/repos/…/issues/N/comments`). Native ReScript bindings call `fetch` in
+the JS runtime — that’s banned by the language policy (no JS in the
+AffineScript port). This library closes the gap.
+
+See <a href="ABI-FFI-README.md" class="md">ABI-FFI-README</a> for the
+RSR pattern.
+
+# Build
+
+```shell
+cd ffi/zig
+zig build           # builds libhpm_http_client.{so,a}
+zig build test      # runs Zig-side test suite
+```
+
+# Consuming from AffineScript
+
+```affinescript
+extern fn hpm_http_client_request(
+  client: Ptr,
+  method: Int,
+  url_ptr: Bytes, url_len: Int,
+  hdrs_ptr: Bytes, hdrs_len: Int,
+  body_ptr: Bytes, body_len: Int
+) -> Ptr;
+```
+
+See `examples/affinescript-consumer.affine` (TODO).
+
+# Licence
+
+MPL-2.0. See [LICENSE](LICENSE).
