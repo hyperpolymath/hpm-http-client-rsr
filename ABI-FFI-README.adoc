@@ -1,23 +1,18 @@
-<!--
-SPDX-License-Identifier: CC-BY-SA-4.0
-Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
--->
-<!-- SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk> -->
+== hpm-http-client-rsr ABI/FFI Documentation
 
-# hpm-http-client-rsr ABI/FFI Documentation
+=== Overview
 
-## Overview
+This library follows the *Hyperpolymath RSR Standard* for ABI and FFI
+design:
 
-This library follows the **Hyperpolymath RSR Standard** for ABI and FFI design:
+* *ABI (Application Binary Interface)* defined in *Idris2*
+* *FFI (Foreign Function Interface)* implemented in *Zig*
+* *Generated C headers* bridge Idris2 ABI to Zig FFI
+* *Any language* can call through standard C ABI
 
-- **ABI (Application Binary Interface)** defined in **Idris2**
-- **FFI (Foreign Function Interface)** implemented in **Zig**
-- **Generated C headers** bridge Idris2 ABI to Zig FFI
-- **Any language** can call through standard C ABI
+=== Architecture
 
-## Architecture
-
-```
+....
 ┌─────────────────────────────────────────────┐
 │  ABI Definitions (Idris2)                   │
 │  src/abi/                                   │
@@ -43,11 +38,12 @@ This library follows the **Hyperpolymath RSR Standard** for ABI and FFI design:
 ┌─────────────────────────────────────────────┐
 │  Any Language via C ABI                     │
 └─────────────────────────────────────────────┘
-```
+....
 
-## C ABI surface
+=== C ABI surface
 
-```c
+[source,c]
+----
 // Client lifecycle
 hpm_http_client_t* hpm_http_client_new(void);
 void               hpm_http_client_free(hpm_http_client_t* client);
@@ -69,24 +65,27 @@ int     hpm_http_response_status(hpm_http_response_t* resp);   // status code, -
 ssize_t hpm_http_response_body(hpm_http_response_t* resp,
                                 uint8_t* out, size_t cap);     // bytes written / size-query / -1
 void    hpm_http_response_free(hpm_http_response_t* resp);
-```
+----
 
-## Methods
+=== Methods
 
-| Ordinal | Method |
-|---------|--------|
-| 0 | GET |
-| 1 | HEAD |
-| 2 | POST |
-| 3 | PUT |
-| 4 | DELETE |
-| 5 | CONNECT |
-| 6 | OPTIONS |
-| 7 | TRACE |
-| 8 | PATCH |
+[cols=",",options="header",]
+|===
+|Ordinal |Method
+|0 |GET
+|1 |HEAD
+|2 |POST
+|3 |PUT
+|4 |DELETE
+|5 |CONNECT
+|6 |OPTIONS
+|7 |TRACE
+|8 |PATCH
+|===
 
-## Limits
+=== Limits
 
-- Response body: 1 MiB per request (configurable in a later version)
-- Extra request headers: 16 entries per request
-- TLS: handled transparently by `std.crypto.tls.Client` (no caller config)
+* Response body: 1 MiB per request (configurable in a later version)
+* Extra request headers: 16 entries per request
+* TLS: handled transparently by `+std.crypto.tls.Client+` (no caller
+config)
